@@ -1,31 +1,500 @@
 {
   "name": "social-media-alert-default-list",
-  "version": 1,
-  "note": "這是安裝後預設載入的示範清單，裡面只有不存在的示範帳號，用來讓你看到警示長什麼樣子。請自行刪除並換成你要追蹤的帳號，或改用訂閱清單。",
+  "version": 2,
+  "updatedAt": "2026-09-16",
+  "note": "本清單整理自公開報導中被具名的粉專，分級沿用來源清冊的高／中／低風險與「應排除」四類。",
+  "sources": [
+    "王宏恩 2022 年關於境外管理粉專的研究",
+    "DSET 具名的無邊界集團粉專",
+    "無國界記者 2026 年 4 月具名",
+    "2022 年警方鎖定、具中國管理員的粉專",
+    "各粉專的 Facebook 透明度資訊與自介"
+  ],
+  "gaps": [
+    "靠北系列：DSET 只具名 2 個，其餘未公布",
+    "王宏恩／林雨蒼的「台灣」系列：未公開任何名稱",
+    "2026 年 6 月洗版的 163 個、2022 年 25 個中的另外 20 個：未公布",
+    "「我是 OO 人」其餘 17 縣市：推測存在但搜尋引擎無索引"
+  ],
+  "disclaimer": "標記僅供個人查核參考，不構成對任何粉專、公司或個人的事實認定。等級為 safe 的項目是「已澄清、與被點名對象無關」，不會發出警示。沒有網址代號的項目只能用粉專顯示名稱比對，可能對到同名的其他粉專，請自行確認透明度資訊後再判斷。",
   "entries": [
     {
       "platform": "facebook",
-      "handle": "sma.demo.scam.page",
-      "name": "示範：假投資粉專",
+      "nameMatch": [
+        "反萊豬 我+1"
+      ],
+      "name": "反萊豬 我＋1（粉專）",
       "level": "danger",
-      "reason": "示範資料：這類粉專常冒用名人形象，誘導加入投資群組或匯款。",
-      "tags": ["示範", "投資詐騙"]
+      "reason": "負責人地點香港（王宏恩 2022）。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
     },
     {
       "platform": "facebook",
-      "handle": "sma.demo.fake.shop",
-      "name": "示範：一頁式購物詐騙",
-      "level": "warning",
-      "reason": "示範資料：宣稱超低價商品、只留私訊下單、沒有實體店家資訊。",
-      "tags": ["示範", "購物詐騙"]
+      "nameMatch": [
+        "反萊豬 我+1"
+      ],
+      "name": "反萊豬 我＋1（社團）",
+      "level": "danger",
+      "reason": "管理員多自稱香港（王宏恩 2022）。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄",
+        "社團"
+      ]
     },
     {
-      "platform": "threads",
-      "handle": "sma.demo.rumor",
-      "name": "示範：經常散布未查證訊息的帳號",
+      "platform": "facebook",
+      "nameMatch": [
+        "靠北醫生"
+      ],
+      "name": "靠北醫生",
+      "level": "danger",
+      "reason": "DSET 具名，無邊界集團。注意：「靠北」是台灣常見的匿名投稿粉專名，被點名的只有這一個，其他靠北 XX 不能一概而論。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄",
+        "無邊界集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "舊時光"
+      ],
+      "name": "舊時光",
+      "level": "danger",
+      "reason": "DSET 具名，無邊界集團。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄",
+        "無邊界集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "50+健康生活"
+      ],
+      "name": "50+健康生活",
+      "level": "danger",
+      "reason": "無國界記者 2026/4 具名。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "愛經驗"
+      ],
+      "name": "愛經驗",
+      "level": "danger",
+      "reason": "2022 年警方鎖定，中國管理員。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "buzzhand"
+      ],
+      "name": "buzzhand",
+      "level": "danger",
+      "reason": "2022 年警方鎖定，中國管理員。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "人生向前走"
+      ],
+      "name": "人生向前走",
+      "level": "danger",
+      "reason": "2022 年警方鎖定，中國管理員。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "每日正能量"
+      ],
+      "name": "每日正能量",
+      "level": "danger",
+      "reason": "2022 年警方鎖定，中國管理員。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "omg快報"
+      ],
+      "name": "omg快報",
+      "level": "danger",
+      "reason": "2022 年警方鎖定，中國管理員。",
+      "tags": [
+        "境外管理",
+        "政治操弄紀錄"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "zmyqqlv",
+      "name": "咱們一起去旅行",
+      "level": "warning",
+      "reason": "拼音代號、非台灣用語；香港管理一說待驗證。",
+      "tags": [
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "GoodClub.tw",
+      "name": "ENews 快新聞",
+      "level": "warning",
+      "reason": "個人名義負責、標註 AI content、新聞型。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "ENews.Onlooker",
+      "name": "ENews 嗑瓜新聞",
+      "level": "warning",
+      "reason": "績碩科技負責，舊頁改名。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "enews.com.tw",
+      "name": "Enews 發燒熱新聞",
+      "level": "warning",
+      "reason": "績碩科技負責。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "ENews.StarStar",
+      "name": "ENews 娛樂吃瓜群眾",
+      "level": "warning",
+      "reason": "ENews 系列。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "SALE.tw",
+      "name": "ENews 好康道相報",
+      "level": "warning",
+      "reason": "舊頁改名。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "profileId": "100057876810769",
+      "name": "ENews 好康道相報（第二頁）",
+      "level": "warning",
+      "reason": "與 SALE.tw 同名的第二頁。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "newsworld.info",
+      "name": "ENews新聞網",
+      "level": "warning",
+      "reason": "官網指定主粉專，今年 3 月曾關站清掃。",
+      "tags": [
+        "ENews 系列",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Taipei.Info",
+      "name": "我是台北人",
+      "level": "warning",
+      "reason": "LIFE 生活網統一經營、AI prompt 外洩。注意：臺北市政府官方的「Humans of Taipei 我是台北人」是另一個粉專。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Taichung.Info",
+      "name": "我是台中人",
+      "level": "warning",
+      "reason": "LIFE 生活網統一經營、AI prompt 外洩。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Tainan.Info",
+      "name": "我是台南人",
+      "level": "warning",
+      "reason": "LIFE 生活網統一經營、AI prompt 外洩。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Kaohsiung.Info",
+      "name": "我是高雄人",
+      "level": "warning",
+      "reason": "自介明寫 LIFE 經營。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Taoyuan.Info",
+      "name": "我是桃園人",
+      "level": "warning",
+      "reason": "自介明寫 LIFE 經營。注意：另有一個 i.Taoyuan 的「我是桃園人」不屬於這個集團。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "0101testnews9",
+      "name": "LIFE 生活網 台灣大小事",
+      "level": "warning",
+      "reason": "時事型，內湖，AI 生成可置入。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "enjoyingourlife",
+      "name": "LIFE 生活網 生活好簡單 So Easy",
+      "level": "warning",
+      "reason": "時事型，內湖，AI 生成可置入。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "lifeshare01",
+      "name": "LIFE生活娛樂Boom",
+      "level": "warning",
+      "reason": "時事型，內湖，AI 生成可置入。",
+      "tags": [
+        "LIFE 生活網",
+        "不透明訊號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "LIFE.com.tw",
+      "name": "LIFE 生活網",
       "level": "info",
-      "reason": "示範資料：內容多為未經查證的轉述，建議先查核再分享。",
-      "tags": ["示範", "假訊息"]
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Traveling.tw",
+      "name": "LIFE 生活網 旅遊資訊粉絲團 Traveling",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "lovesportsplus",
+      "name": "LIFE 生活網 我是運動+",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "health.tw",
+      "name": "健康世界",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "HealthyNews.tw",
+      "name": "Life健康新聞快遞",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "healthylives.tw",
+      "name": "每日健康 Health",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "loveyoubig",
+      "name": "動物愛很大 Love Animals",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "Pet.tw",
+      "name": "寵物資訊 Pet info",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "ipetgroup",
+      "name": "就是愛寵物 IPetGroup",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "Pollster 波仕特市調網"
+      ],
+      "name": "Pollster 波仕特市調網",
+      "level": "info",
+      "reason": "同集團，非新聞輿論型。清冊未提供網址代號。",
+      "tags": [
+        "LIFE 生活網",
+        "同集團"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "Humans of Taipei 我是台北人"
+      ],
+      "name": "Humans of Taipei 我是台北人",
+      "level": "safe",
+      "reason": "臺北市政府官方粉專，與 LIFE 生活網的 Taipei.Info「我是台北人」不是同一個。",
+      "tags": [
+        "同名易混淆",
+        "官方帳號"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "i.Taoyuan",
+      "name": "我是桃園人（i.Taoyuan）",
+      "level": "safe",
+      "reason": "自介無 LIFE 標記，與 Taoyuan.Info 不是同一個粉專。",
+      "tags": [
+        "同名易混淆"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "handle": "MyHsinchu",
+      "name": "我是新竹人（MyHsinchu）",
+      "level": "safe",
+      "reason": "自介無 LIFE 標記，不屬於 LIFE 生活網集團。",
+      "tags": [
+        "同名易混淆"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "靠北婆婆",
+        "靠北婆家"
+      ],
+      "name": "靠北婆婆／靠北婆家",
+      "level": "safe",
+      "reason": "2015 年起的台灣匿名投稿社團，與無邊界的「靠北」系列不同。",
+      "tags": [
+        "同名易混淆"
+      ]
+    },
+    {
+      "platform": "facebook",
+      "nameMatch": [
+        "靠北老公"
+      ],
+      "name": "靠北老公",
+      "level": "safe",
+      "reason": "2015 年起的台灣匿名投稿社團，與無邊界的「靠北」系列不同。",
+      "tags": [
+        "同名易混淆"
+      ]
     }
   ]
 }

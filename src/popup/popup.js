@@ -21,6 +21,7 @@
 
   let currentTarget = null;
   let currentTabId = null;
+  let currentSettings = null;
 
   function setHint(message, type) {
     el.addHint.textContent = message || '';
@@ -84,9 +85,18 @@
     const meta = document.createElement('div');
     meta.className = 'match__meta';
     const levelInfo = SMA.LEVELS[entry.level];
-    meta.textContent = (levelInfo ? levelInfo.label : '提醒')
-      + '・來源：' + (entry.source === 'builtin' ? '內建示範' : entry.source && entry.source.indexOf('subscription') === 0 ? '訂閱清單' : '自行新增');
+    const source = entry.source === 'builtin' ? '內建清單'
+      : entry.source && entry.source.indexOf('subscription') === 0 ? '訂閱清單' : '自行新增';
+    meta.textContent = (levelInfo ? levelInfo.label : '提醒') + '・來源：' + source
+      + (entry._viaName ? '・以名稱比對' : '');
     box.appendChild(meta);
+
+    if (entry._viaName) {
+      const note = document.createElement('div');
+      note.className = 'match__note';
+      note.textContent = '清單裡沒有這筆的網址代號，是用粉專名稱比對的，請自行確認是不是同一個粉專。';
+      box.appendChild(note);
+    }
 
     return box;
   }
@@ -110,21 +120,37 @@
     el.target.textContent = SMA.describeTarget(status.target)
       + '（' + (status.target.platform === 'facebook' ? 'Facebook' : 'Threads') + '）';
 
-    const matches = status.matches || [];
-    if (!matches.length) {
-      el.result.classList.add('status--safe');
-      el.result.textContent = '✔ 這個帳號目前不在你的警示清單中。';
-      el.addCard.hidden = false;
-      setHint('');
-    } else {
-      const level = SMA.highestLevel(matches) || 'warning';
+    const settings = status.settings || currentSettings || SMA.DEFAULT_SETTINGS;
+    const split = SMA.splitMatches(status.matches || [], settings.minLevel);
+
+    if (split.alerts.length) {
+      const level = SMA.highestLevel(split.alerts) || 'warning';
       el.result.classList.add('status--' + level);
-      el.result.textContent = '⚠ 這個帳號被標記為「' + (SMA.LEVELS[level] ? SMA.LEVELS[level].label : '提醒') + '」，共 ' + matches.length + ' 筆紀錄。';
-      matches.forEach(function (entry) {
+      el.result.textContent = '⚠ 這個帳號被標記為「'
+        + (SMA.LEVELS[level] ? SMA.LEVELS[level].label : '提醒') + '」，共 '
+        + split.alerts.length + ' 筆紀錄。';
+      split.alerts.forEach(function (entry) {
         el.matches.appendChild(renderMatch(entry));
       });
       el.addCard.hidden = true;
+      return;
     }
+
+    if (split.cleared.length) {
+      el.result.classList.add('status--safe');
+      el.result.textContent = '✔ 已澄清：這個帳號被標註為與被點名的對象無關。';
+      split.cleared.forEach(function (entry) {
+        el.matches.appendChild(renderMatch(entry));
+      });
+      el.addCard.hidden = false;
+      setHint('');
+      return;
+    }
+
+    el.result.classList.add('status--safe');
+    el.result.textContent = '✔ 這個帳號目前不在你的警示清單中。';
+    el.addCard.hidden = false;
+    setHint('');
   }
 
   async function refresh() {
@@ -134,6 +160,7 @@
       SMA.storage.getStats()
     ]);
 
+    currentSettings = settings;
     el.toggle.checked = settings.enabled;
     el.statEntries.textContent = String(entries.length);
     el.statAlerts.textContent = String(stats.alertsShown);

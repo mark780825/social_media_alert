@@ -17,6 +17,7 @@
     showPageBanner: true,
     showFeedBadges: true,
     dimFlaggedPosts: true,
+    showClearedNotice: true,
     minLevel: 'info',
     subscriptionUrl: '',
     autoUpdate: false,
@@ -103,14 +104,16 @@
   async function addEntry(rawEntry) {
     const entry = root.SMA.normalizeEntryInput(rawEntry);
     if (!root.SMA.isValidEntry(entry)) {
-      throw new Error('項目至少要有帳號名稱、數字 ID 或社團代號');
+      throw new Error('項目至少要有帳號代號、數字 ID、社團代號或要比對的粉專名稱');
     }
     const entries = await getEntries();
+    const nameKey = (entry.nameMatch || []).join('|');
     const duplicated = entries.some(function (item) {
       return item.platform === entry.platform
         && item.handle === entry.handle
         && item.profileId === entry.profileId
-        && (item.groupId || '') === (entry.groupId || '');
+        && (item.groupId || '') === (entry.groupId || '')
+        && (item.nameMatch || []).join('|') === nameKey;
     });
     if (duplicated) {
       throw new Error('這個帳號已經在清單中了');
