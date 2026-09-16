@@ -1,0 +1,12 @@
+{
+  "name": "social-media-alert",
+  "version": "0.1.0",
+  "description": "瀏覽 Facebook / Threads 時，自動標示清單中的可疑粉專或帳號的瀏覽器擴充功能。",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/common/matcher.js && node --check src/common/storage.js && node --check src/content/content.js && node --check src/background/service-worker.js && node --check src/popup/popup.js && node --check src/options/options.js",
+    "build": "bash scripts/build.sh"
+  },
+  "license": "MIT"
+}

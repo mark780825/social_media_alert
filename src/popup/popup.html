@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>社群媒體警示</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header__title">
+      <span class="header__icon">⚠</span>
+      <span>社群媒體警示</span>
+    </div>
+    <label class="switch" title="啟用或停用警示">
+      <input type="checkbox" id="toggle-enabled" />
+      <span class="switch__slider"></span>
+    </label>
+  </header>
+
+  <main>
+    <section class="card" id="status-card">
+      <div class="card__label">目前頁面</div>
+      <div class="card__value" id="status-target">讀取中…</div>
+      <div class="status" id="status-result"></div>
+      <div class="matches" id="status-matches"></div>
+    </section>
+
+    <section class="card" id="add-card" hidden>
+      <div class="card__label">把這個帳號加入警示清單</div>
+      <label class="field">
+        <span>顯示名稱（選填）</span>
+        <input type="text" id="add-name" placeholder="例如：假投資粉專" />
+      </label>
+      <label class="field">
+        <span>警示等級</span>
+        <select id="add-level">
+          <option value="danger">高風險</option>
+          <option value="warning" selected>需留意</option>
+          <option value="info">提醒</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>原因</span>
+        <textarea id="add-reason" rows="2" placeholder="例如：冒用名人推銷投資群組"></textarea>
+      </label>
+      <button class="btn btn--primary" id="add-submit">加入警示清單</button>
+      <div class="hint" id="add-hint"></div>
+    </section>
+
+    <section class="stats">
+      <div><strong id="stat-entries">0</strong><span>清單筆數</span></div>
+      <div><strong id="stat-alerts">0</strong><span>累計提醒</span></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <button class="btn" id="open-options">管理清單與設定</button>
+  </footer>
+
+  <script src="../common/matcher.js"></script>
+  <script src="../common/storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

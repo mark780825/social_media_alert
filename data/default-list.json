@@ -1,0 +1,31 @@
+{
+  "name": "social-media-alert-default-list",
+  "version": 1,
+  "note": "這是安裝後預設載入的示範清單，裡面只有不存在的示範帳號，用來讓你看到警示長什麼樣子。請自行刪除並換成你要追蹤的帳號，或改用訂閱清單。",
+  "entries": [
+    {
+      "platform": "facebook",
+      "handle": "sma.demo.scam.page",
+      "name": "示範：假投資粉專",
+      "level": "danger",
+      "reason": "示範資料：這類粉專常冒用名人形象，誘導加入投資群組或匯款。",
+      "tags": ["示範", "投資詐騙"]
+    },
+    {
+      "platform": "facebook",
+      "handle": "sma.demo.fake.shop",
+      "name": "示範：一頁式購物詐騙",
+      "level": "warning",
+      "reason": "示範資料：宣稱超低價商品、只留私訊下單、沒有實體店家資訊。",
+      "tags": ["示範", "購物詐騙"]
+    },
+    {
+      "platform": "threads",
+      "handle": "sma.demo.rumor",
+      "name": "示範：經常散布未查證訊息的帳號",
+      "level": "info",
+      "reason": "示範資料：內容多為未經查證的轉述，建議先查核再分享。",
+      "tags": ["示範", "假訊息"]
+    }
+  ]
+}

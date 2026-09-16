@@ -1,0 +1,79 @@
+/* 動態牆貼文與連結的警示樣式。
+   Facebook / Threads 的樣式權重很高，因此這裡統一加上 !important。 */
+
+.sma-post-warning {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  margin: 8px !important;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  border: 1px solid #f5c2c0 !important;
+  background: #fdecea !important;
+  color: #8c1d18 !important;
+  font-family: -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.sma-post-warning.sma-level-warning {
+  border-color: #f7d08a !important;
+  background: #fff4e0 !important;
+  color: #7a4100 !important;
+}
+
+.sma-post-warning.sma-level-info {
+  border-color: #b6d3fb !important;
+  background: #e8f0fe !important;
+  color: #174ea6 !important;
+}
+
+.sma-post-warning__icon {
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+
+.sma-post-warning__title {
+  font-weight: 700 !important;
+}
+
+.sma-post-warning__desc {
+  margin-top: 2px !important;
+  opacity: .9 !important;
+  white-space: pre-wrap !important;
+}
+
+.sma-flagged-post {
+  outline: 2px solid #d93025 !important;
+  outline-offset: -2px !important;
+  border-radius: 10px !important;
+}
+
+.sma-flagged-post.sma-level-warning {
+  outline-color: #f29900 !important;
+}
+
+.sma-flagged-post.sma-level-info {
+  outline-color: #1a73e8 !important;
+}
+
+.sma-flagged-link {
+  box-shadow: inset 0 -2px 0 #d93025 !important;
+  text-decoration: underline wavy #d93025 !important;
+  text-underline-offset: 2px !important;
+}
+
+.sma-flagged-link.sma-level-warning {
+  box-shadow: inset 0 -2px 0 #f29900 !important;
+  text-decoration-color: #f29900 !important;
+}
+
+.sma-flagged-link.sma-level-info {
+  box-shadow: inset 0 -2px 0 #1a73e8 !important;
+  text-decoration-color: #1a73e8 !important;
+}
+
+.sma-flagged-link::after {
+  content: " ⚠";
+  font-size: .9em;
+}

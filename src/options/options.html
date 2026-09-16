@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>社群媒體警示 — 設定</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>⚠ 社群媒體警示</h1>
+    <p>管理警示清單，並設定在 Facebook / Threads 上的提醒方式。</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>一般設定</h2>
+      <label class="check"><input type="checkbox" id="set-enabled" /> 啟用警示功能</label>
+      <label class="check"><input type="checkbox" id="set-banner" /> 進入帳號／粉專頁時顯示頂端警示橫幅</label>
+      <label class="check"><input type="checkbox" id="set-feed" /> 在動態牆的貼文與連結上加註標記</label>
+      <label class="check"><input type="checkbox" id="set-dim" /> 為被標記的貼文加上外框</label>
+      <label class="field">
+        <span>最低顯示等級</span>
+        <select id="set-min-level">
+          <option value="info">提醒（顯示全部）</option>
+          <option value="warning">需留意以上</option>
+          <option value="danger">只顯示高風險</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>訂閱清單</h2>
+      <p class="muted">可以填入一個回傳 JSON 的網址，定期同步他人維護的警示名單。格式與匯出的檔案相同。</p>
+      <label class="field">
+        <span>訂閱網址</span>
+        <input type="url" id="set-subscription" placeholder="https://example.com/list.json" />
+      </label>
+      <label class="check"><input type="checkbox" id="set-auto-update" /> 自動定期更新</label>
+      <label class="field">
+        <span>更新間隔（小時）</span>
+        <input type="number" id="set-interval" min="1" max="168" />
+      </label>
+      <div class="row">
+        <button class="btn btn--primary" id="btn-update-subscription">立即更新</button>
+        <button class="btn" id="btn-clear-subscription">清除訂閱資料</button>
+      </div>
+      <div class="hint" id="subscription-status"></div>
+    </section>
+
+    <section class="panel">
+      <h2>新增警示帳號</h2>
+      <div class="grid">
+        <label class="field">
+          <span>平台</span>
+          <select id="new-platform">
+            <option value="any">不限平台</option>
+            <option value="facebook">Facebook</option>
+            <option value="threads">Threads</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>帳號名稱或網址</span>
+          <input type="text" id="new-handle" placeholder="例如 some.page 或 https://www.facebook.com/some.page" />
+        </label>
+        <label class="field">
+          <span>數字 ID（選填）</span>
+          <input type="text" id="new-profile-id" placeholder="profile.php?id= 後面的數字" />
+        </label>
+        <label class="field">
+          <span>顯示名稱</span>
+          <input type="text" id="new-name" placeholder="例如：假投資粉專" />
+        </label>
+        <label class="field">
+          <span>警示等級</span>
+          <select id="new-level">
+            <option value="danger">高風險</option>
+            <option value="warning" selected>需留意</option>
+            <option value="info">提醒</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>標籤（以逗號分隔）</span>
+          <input type="text" id="new-tags" placeholder="詐騙, 假訊息" />
+        </label>
+      </div>
+      <label class="field">
+        <span>原因說明</span>
+        <textarea id="new-reason" rows="2" placeholder="例如：冒用名人形象推銷投資群組"></textarea>
+      </label>
+      <button class="btn btn--primary" id="btn-add">加入清單</button>
+      <div class="hint" id="add-status"></div>
+    </section>
+
+    <section class="panel panel--wide">
+      <div class="panel__head">
+        <h2>警示清單</h2>
+        <div class="row">
+          <button class="btn" id="btn-export">匯出 JSON</button>
+          <button class="btn" id="btn-import">匯入 JSON</button>
+          <button class="btn btn--danger" id="btn-clear">清空自訂清單</button>
+          <input type="file" id="file-import" accept="application/json,.json" hidden />
+        </div>
+      </div>
+      <div class="row filters">
+        <input type="search" id="filter-text" placeholder="搜尋帳號、名稱或原因" />
+        <select id="filter-platform">
+          <option value="">所有平台</option>
+          <option value="facebook">Facebook</option>
+          <option value="threads">Threads</option>
+          <option value="any">不限平台</option>
+        </select>
+        <select id="filter-level">
+          <option value="">所有等級</option>
+          <option value="danger">高風險</option>
+          <option value="warning">需留意</option>
+          <option value="info">提醒</option>
+        </select>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>帳號</th>
+            <th>名稱</th>
+            <th>平台</th>
+            <th>等級</th>
+            <th>原因</th>
+            <th>來源</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="entry-rows"></tbody>
+      </table>
+      <div class="hint" id="list-status"></div>
+    </section>
+  </main>
+
+  <script src="../common/matcher.js"></script>
+  <script src="../common/storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
