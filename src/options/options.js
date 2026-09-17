@@ -241,8 +241,19 @@
       });
     }
 
-    setHint($('list-status'), '共 ' + all.length + ' 筆（自訂 ' + entries.length
-      + ' 筆、訂閱 ' + subEntries.length + ' 筆），目前顯示 ' + visible.length + ' 筆。');
+    // 內建清單與使用者自己新增的都存在同一區，靠 source 區分才不會把內建的算成自訂。
+    const builtinCount = entries.filter(function (entry) {
+      return entry.source === 'builtin';
+    }).length;
+    const userCount = entries.length - builtinCount;
+    const parts = [];
+    if (builtinCount) parts.push('內建 ' + builtinCount);
+    if (userCount) parts.push('自訂 ' + userCount);
+    if (subEntries.length) parts.push('訂閱 ' + subEntries.length);
+
+    setHint($('list-status'), '共 ' + all.length + ' 筆'
+      + (parts.length ? '（' + parts.join('、') + '）' : '')
+      + '，目前顯示 ' + visible.length + ' 筆。');
   }
 
   function bindFilters() {
