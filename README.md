@@ -64,6 +64,39 @@ Chrome / Edge / Brave 等 Chromium 瀏覽器：
 更新內建清單後，已經安裝過的使用者可以到設定頁按「**重新載入內建清單**」補進新項目
 （已存在的會自動略過，自己新增的不會被動到）。
 
+## 檢舉頁面（GitHub Pages）
+
+`site/` 是一個對外公開的檢舉頁，任何人都可以回報有輿論操弄疑慮的粉專：
+
+- **檢舉表單**：自動解析粉專網址取出代號、檢查必填欄位，再把內容整理成一則預填好的
+  GitHub Issue（附帶給維護者的查證檢核清單）。沒有 GitHub 帳號的人可以改用「複製內容」。
+- **收錄標準**：頁面上明列會查證的訊號與**不會收錄**的情況（立場不同、個人帳號、
+  無依據的猜測、私人恩怨、同名整批指認）。
+- **目前清單**：直接讀 `data/default-list.json`，可搜尋與依等級篩選，並列出已知缺口。
+- **申訴管道**：粉專經營者可提出更正，結果分為移除、改標為「已澄清」、或維持並補充說明。
+
+沒有後端、沒有 Cookie、不做追蹤——所有動作都在瀏覽器本機完成，送出即是開一則公開 Issue。
+
+### 啟用
+
+1. GitHub repo → **Settings → Pages → Source** 選 **GitHub Actions**。
+2. 把分支合併進 `main`（或到 Actions 頁手動執行「部署檢舉頁到 GitHub Pages」）。
+3. 網址為 `https://<你的帳號>.github.io/social_media_alert/`。
+
+`data/default-list.json` 或 `src/common/matcher.js` 有更動時會自動重新部署，
+網站與擴充功能共用同一份資料，不會有兩份清單不同步的問題。
+
+### 本機預覽
+
+```bash
+npm run site:serve   # http://localhost:8080
+```
+
+### 查證流程
+
+維護者收到檢舉後的判斷標準寫在 [docs/review-process.md](docs/review-process.md)：
+可查證性檢核 → 排除不收的情況 → 決定等級 → 寫進清單 → 回覆結案。
+
 ## 使用方式
 
 ### 把帳號加入警示清單
@@ -121,9 +154,11 @@ Chrome / Edge / Brave 等 Chromium 瀏覽器：
 ## 開發
 
 ```bash
-npm test     # 執行網址解析與比對的單元測試
-npm run check  # 檢查所有 JS 檔語法
-npm run build  # 打包成 dist/social-media-alert-<版本>.zip（需要 zip 指令）
+npm test          # 執行網址解析與比對的單元測試
+npm run check     # 檢查所有 JS 檔語法
+npm run build     # 打包成 dist/social-media-alert-<版本>.zip（需要 zip 指令）
+npm run site      # 組出檢舉頁要用的資料（site/data、site/lib）
+npm run site:serve  # 本機預覽檢舉頁
 ```
 
 專案結構：
@@ -136,7 +171,10 @@ src/content/               注入頁面的比對與警示 UI
 src/background/            service worker：示範清單、徽章、訂閱更新
 src/popup/                 工具列彈出視窗
 src/options/               設定與清單管理頁
-data/default-list.json     安裝時載入的示範清單
+data/default-list.json     安裝時載入的內建清單（網站與擴充功能共用）
+site/                      對外公開的檢舉頁（GitHub Pages）
+docs/review-process.md     維護者的查證流程
+.github/ISSUE_TEMPLATE/    檢舉與申訴的 Issue 範本
 test/                      單元測試
 ```
 

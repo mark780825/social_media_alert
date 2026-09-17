@@ -1,0 +1,49 @@
+name: 申訴（我的粉專被列入清單）
+description: 認為被收錄有誤，提出更正或移除
+title: "[申訴] "
+labels: ["申訴"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        查證後可能的結果：**移除**（依據站不住腳）、**改標為已澄清**（名字相似但確認無關）、
+        **維持並補充**（依據仍成立，但把你的說法一併記錄）。
+
+  - type: input
+    id: page-name
+    attributes:
+      label: 粉專名稱
+    validations:
+      required: true
+
+  - type: input
+    id: page-url
+    attributes:
+      label: 粉專網址
+    validations:
+      required: true
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: 你的身分
+      options:
+        - 粉專經營者或管理員
+        - 粉專的合作對象
+        - 其他（請在下方說明）
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 申訴理由
+      description: 清單上的依據哪裡有誤？
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 佐證資料
+      description: 頁面透明度截圖、公司登記、經營說明等。

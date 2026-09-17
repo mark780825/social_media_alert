@@ -1,0 +1,70 @@
+name: 檢舉粉專
+description: 檢舉具有輿論操弄、境外管理或中資背景訊號的粉專
+title: "[檢舉] "
+labels: ["檢舉", "待查證"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        送出的內容會公開。請只填寫你願意公開的資訊。
+
+        **不會收錄**：只是政治立場不同、個人帳號、沒有依據的猜測、商業競爭或私人恩怨。
+
+  - type: input
+    id: page-name
+    attributes:
+      label: 粉專名稱
+      placeholder: 粉專顯示的完整名稱
+    validations:
+      required: true
+
+  - type: input
+    id: page-url
+    attributes:
+      label: 粉專網址
+      placeholder: https://www.facebook.com/…
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: categories
+    attributes:
+      label: 檢舉分類（可複選）
+      options:
+        - label: 境外管理（透明度顯示管理員在台灣以外）
+        - label: 中資或中國官方背景
+        - label: 協同性造假行為（多粉專同步發文、共用管理員）
+        - label: 粉專改名或轉手（原本經營其他主題）
+        - label: 內容農場模式（大量轉載不標來源）
+        - label: AI 生成內容未標示
+        - label: 散布已被查核認定的假訊息
+        - label: 其他
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: 具體說明
+      description: 描述你觀察到什麼、什麼時候看到的。至少 30 字。
+      placeholder: 例如：透明度頁面顯示 3 位管理員位於香港，粉專 2023 年 8 月從「OO 美食」改名，改名後幾乎只發選舉相關內容。
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 佐證連結
+      description: 一行一個。貼文網址、查核報告、新聞報導、截圖連結。
+
+  - type: textarea
+    id: transparency
+    attributes:
+      label: 透明度資訊觀察
+      description: "粉專頁 →「關於」→「頁面透明度」看到的內容：建立日期、管理員所在地與人數、曾用名稱。"
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 確認事項
+      options:
+        - label: 我了解這則檢舉會公開，填寫的是可查證的觀察而非個人猜測，也了解被檢舉不等於被收錄。
+          required: true

@@ -6,7 +6,9 @@
   "scripts": {
     "test": "node --test test/*.test.js",
     "check": "node --check src/common/matcher.js && node --check src/common/storage.js && node --check src/content/content.js && node --check src/background/service-worker.js && node --check src/popup/popup.js && node --check src/options/options.js",
-    "build": "bash scripts/build.sh"
+    "build": "bash scripts/build.sh",
+    "site": "bash scripts/build-site.sh",
+    "site:serve": "bash scripts/build-site.sh --serve"
   },
   "license": "MIT"
 }
