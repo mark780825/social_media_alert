@@ -102,3 +102,65 @@ test('直接貼上網址也能建立清單項目', () => {
 test('沒有任何識別資訊的項目視為無效', () => {
   assert.strictEqual(SMA.isValidEntry(SMA.normalizeEntryInput({ name: '只有名字' })), false);
 });
+
+test('以粉專名稱比對，命中的項目會標上 _viaName', () => {
+  const index = SMA.buildIndex([
+    SMA.normalizeEntryInput({ platform: 'facebook', nameMatch: ['靠北醫生'], level: 'danger', reason: 'DSET 具名' })
+  ]);
+  const hits = SMA.matchNames(index, ['靠北醫生 | Facebook'.replace(' | Facebook', ''), '其他名稱']);
+  assert.strictEqual(hits.length, 1);
+  assert.strictEqual(hits[0]._viaName, true);
+  assert.strictEqual(hits[0].reason, 'DSET 具名');
+});
+
+test('名稱比對會忽略空白與全形符號差異', () => {
+  const index = SMA.buildIndex([
+    SMA.normalizeEntryInput({ platform: 'facebook', nameMatch: ['反萊豬 我+1'], level: 'danger' })
+  ]);
+  assert.strictEqual(SMA.matchNames(index, ['反萊豬我＋1']).length, 1);
+  assert.strictEqual(SMA.matchNames(index, ['反萊豬 我 ＋ 1']).length, 1);
+  assert.strictEqual(SMA.matchNames(index, ['反萊豬我+2']).length, 0);
+});
+
+test('只有名稱的項目視為有效，且不會被當成網址代號', () => {
+  const entry = SMA.normalizeEntryInput({ platform: 'facebook', nameMatch: ['每日正能量'] });
+  assert.ok(SMA.isValidEntry(entry));
+  assert.strictEqual(entry.handle, '');
+  const index = SMA.buildIndex([entry]);
+  assert.strictEqual(SMA.matchUrl(index, 'https://www.facebook.com/每日正能量').matches.length, 0);
+});
+
+test('splitMatches 把已澄清項目與警示分開', () => {
+  const entries = [
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'taoyuan.info', level: 'warning' }),
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'i.taoyuan', level: 'safe' })
+  ];
+  const index = SMA.buildIndex(entries);
+
+  const flagged = SMA.splitMatches(SMA.matchUrl(index, 'https://www.facebook.com/Taoyuan.Info').matches, 'info');
+  assert.strictEqual(flagged.alerts.length, 1);
+  assert.strictEqual(flagged.cleared.length, 0);
+
+  const cleared = SMA.splitMatches(SMA.matchUrl(index, 'https://www.facebook.com/i.Taoyuan').matches, 'info');
+  assert.strictEqual(cleared.alerts.length, 0, '已澄清的帳號不該產生警示');
+  assert.strictEqual(cleared.cleared.length, 1);
+});
+
+test('最低顯示等級不會影響已澄清項目', () => {
+  const matches = [
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'a', level: 'info' }),
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'b', level: 'safe' })
+  ];
+  const split = SMA.splitMatches(matches, 'danger');
+  assert.strictEqual(split.alerts.length, 0, 'info 應被最低等級濾掉');
+  assert.strictEqual(split.cleared.length, 1, 'safe 不受最低等級影響');
+});
+
+test('mergeMatches 以網址代號的結果優先且不重複', () => {
+  const byKey = [{ id: 'x', level: 'warning' }];
+  const byName = [{ id: 'x', level: 'warning', _viaName: true }, { id: 'y', level: 'danger', _viaName: true }];
+  const merged = SMA.mergeMatches(byKey, byName);
+  assert.strictEqual(merged.length, 2);
+  assert.strictEqual(merged[0].id, 'y');
+  assert.strictEqual(merged.find((m) => m.id === 'x')._viaName, undefined);
+});

@@ -20,7 +20,7 @@
 
   function sourceLabel(source) {
     if (!source || source === 'user') return '自行新增';
-    if (source === 'builtin') return '內建示範';
+    if (source === 'builtin') return '內建清單';
     if (String(source).indexOf('subscription') === 0) return '訂閱清單';
     return String(source);
   }
@@ -29,6 +29,7 @@
     if (entry.handle) return '@' + entry.handle;
     if (entry.profileId) return 'ID ' + entry.profileId;
     if (entry.groupId) return '社團 ' + entry.groupId;
+    if (entry.nameMatch && entry.nameMatch.length) return '名稱：' + entry.nameMatch.join('、');
     return '—';
   }
 
@@ -40,6 +41,7 @@
     $('set-banner').checked = settings.showPageBanner;
     $('set-feed').checked = settings.showFeedBadges;
     $('set-dim').checked = settings.dimFlaggedPosts;
+    $('set-cleared').checked = settings.showClearedNotice;
     $('set-min-level').value = settings.minLevel;
     $('set-subscription').value = settings.subscriptionUrl || '';
     $('set-auto-update').checked = settings.autoUpdate;
@@ -53,6 +55,7 @@
         showPageBanner: $('set-banner').checked,
         showFeedBadges: $('set-feed').checked,
         dimFlaggedPosts: $('set-dim').checked,
+        showClearedNotice: $('set-cleared').checked,
         minLevel: $('set-min-level').value,
         subscriptionUrl: $('set-subscription').value.trim(),
         autoUpdate: $('set-auto-update').checked,
@@ -60,7 +63,7 @@
       });
     };
 
-    ['set-enabled', 'set-banner', 'set-feed', 'set-dim', 'set-min-level',
+    ['set-enabled', 'set-banner', 'set-feed', 'set-dim', 'set-cleared', 'set-min-level',
       'set-subscription', 'set-auto-update', 'set-interval'].forEach(function (id) {
       $(id).addEventListener('change', save);
     });
@@ -113,10 +116,13 @@
   function bindAddForm() {
     $('btn-add').addEventListener('click', async function () {
       const tags = $('new-tags').value.split(/[,，]/).map(function (t) { return t.trim(); }).filter(Boolean);
+      const nameMatch = $('new-name-match').value.split(/[,，]/)
+        .map(function (n) { return n.trim(); }).filter(Boolean);
       const raw = {
         platform: $('new-platform').value,
         handle: $('new-handle').value.trim(),
         profileId: $('new-profile-id').value.trim(),
+        nameMatch: nameMatch,
         name: $('new-name').value.trim(),
         level: $('new-level').value,
         reason: $('new-reason').value.trim(),
@@ -125,7 +131,7 @@
       };
       try {
         await SMA.storage.addEntry(raw);
-        ['new-handle', 'new-profile-id', 'new-name', 'new-tags', 'new-reason'].forEach(function (id) {
+        ['new-handle', 'new-profile-id', 'new-name-match', 'new-name', 'new-tags', 'new-reason'].forEach(function (id) {
           $(id).value = '';
         });
         setHint($('add-status'), '已加入清單', 'ok');
@@ -144,6 +150,7 @@
     if (filters.text) {
       const haystack = [entry.handle, entry.profileId, entry.groupId, entry.name, entry.reason]
         .concat(entry.tags || [])
+        .concat(entry.nameMatch || [])
         .filter(Boolean)
         .join(' ')
         .toLowerCase();
@@ -169,6 +176,15 @@
     pill.className = 'pill pill--' + entry.level;
     pill.textContent = SMA.LEVELS[entry.level] ? SMA.LEVELS[entry.level].label : entry.level;
     level.appendChild(pill);
+
+    if (!entry.handle && !entry.profileId && !entry.groupId
+      && entry.nameMatch && entry.nameMatch.length) {
+      const namePill = document.createElement('span');
+      namePill.className = 'pill pill--name';
+      namePill.textContent = '名稱比對';
+      namePill.title = '這筆沒有網址代號，只能用粉專顯示名稱比對，可能對到同名的其他粉專。';
+      level.appendChild(namePill);
+    }
 
     const reason = document.createElement('td');
     reason.className = 'reason';
@@ -225,8 +241,19 @@
       });
     }
 
-    setHint($('list-status'), '共 ' + all.length + ' 筆（自訂 ' + entries.length
-      + ' 筆、訂閱 ' + subEntries.length + ' 筆），目前顯示 ' + visible.length + ' 筆。');
+    // 內建清單與使用者自己新增的都存在同一區，靠 source 區分才不會把內建的算成自訂。
+    const builtinCount = entries.filter(function (entry) {
+      return entry.source === 'builtin';
+    }).length;
+    const userCount = entries.length - builtinCount;
+    const parts = [];
+    if (builtinCount) parts.push('內建 ' + builtinCount);
+    if (userCount) parts.push('自訂 ' + userCount);
+    if (subEntries.length) parts.push('訂閱 ' + subEntries.length);
+
+    setHint($('list-status'), '共 ' + all.length + ' 筆'
+      + (parts.length ? '（' + parts.join('、') + '）' : '')
+      + '，目前顯示 ' + visible.length + ' 筆。');
   }
 
   function bindFilters() {
@@ -305,6 +332,37 @@
         setHint($('list-status'), '匯入失敗：' + err.message, 'error');
       } finally {
         event.target.value = '';
+      }
+    });
+
+    $('btn-reload-builtin').addEventListener('click', async function () {
+      if (!window.confirm('要把內建清單重新匯入嗎？已經存在的項目會自動略過，你自己新增的不會被刪除。')) return;
+      try {
+        const response = await fetch(chrome.runtime.getURL('data/default-list.json'));
+        const payload = await response.json();
+        const existing = await SMA.storage.getEntries();
+        let added = 0;
+
+        (payload.entries || []).forEach(function (item) {
+          const entry = SMA.normalizeEntryInput(Object.assign({}, item, { source: 'builtin' }));
+          if (!SMA.isValidEntry(entry)) return;
+          const nameKey = (entry.nameMatch || []).join('|');
+          const duplicated = existing.some(function (current) {
+            return current.platform === entry.platform
+              && current.handle === entry.handle
+              && current.profileId === entry.profileId
+              && (current.nameMatch || []).join('|') === nameKey;
+          });
+          if (duplicated) return;
+          existing.push(entry);
+          added += 1;
+        });
+
+        await SMA.storage.saveEntries(existing);
+        setHint($('list-status'), '內建清單已重新匯入：新增 ' + added + ' 筆。', 'ok');
+        await renderList();
+      } catch (err) {
+        setHint($('list-status'), '重新載入失敗：' + err.message, 'error');
       }
     });
 

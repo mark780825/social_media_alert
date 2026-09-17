@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>社群媒體警示｜粉專檢舉與查證</title>
+<meta name="description" content="檢舉具有輿論操弄、境外管理或中資背景訊號的粉專。所有檢舉經公開查證後，才會收錄進瀏覽器擴充功能的警示清單。" />
+<link rel="icon" type="image/png" href="icon.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a class="skip" href="#report">跳到檢舉表單</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero__badge">⚠ 社群媒體警示</div>
+    <h1>檢舉有輿論操弄疑慮的粉專</h1>
+    <p class="hero__lead">
+      這裡收集<strong>具有境外管理、中資背景或協同操弄訊號</strong>的 Facebook／Threads 粉專。
+      每一筆檢舉都會公開查證，通過查證的才會收錄進
+      <a href="https://github.com/mark780825/social_media_alert" target="_blank" rel="noopener">瀏覽器擴充功能</a>
+      的警示清單。
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#report">我要檢舉</a>
+      <a class="btn" href="#list">查看目前清單</a>
+      <a class="btn" href="#criteria">收錄標準</a>
+    </div>
+    <p class="hero__note">
+      送出的內容會成為一則<strong>公開的 GitHub Issue</strong>，任何人都看得到。請只填寫你願意公開的資訊。
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="flow">
+    <h2>這份清單怎麼運作</h2>
+    <ol class="flow">
+      <li>
+        <span class="flow__step">1</span>
+        <h3>任何人檢舉</h3>
+        <p>填下面的表單，或直接開一則 Issue。重點不是「你覺得它有問題」，而是<strong>可以被別人重新查一次的依據</strong>：透明度資訊、改名紀錄、同步發文的截圖或連結。</p>
+      </li>
+      <li>
+        <span class="flow__step">2</span>
+        <h3>公開查證</h3>
+        <p>查證過程留在該則 Issue 裡，任何人都能補充或反駁。查證重點是<strong>訊號是否可複驗</strong>，不是內容立場。判斷不出來的就維持「待查」，不會硬收。</p>
+      </li>
+      <li>
+        <span class="flow__step">3</span>
+        <h3>收錄或退回</h3>
+        <p>通過查證的才寫進清單，並標上等級與依據來源；證據不足會退回並說明原因。收錄後的每一筆都附上依據，使用者可以自己判斷要不要採信。</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section" id="criteria">
+    <h2>收錄標準</h2>
+    <div class="cols">
+      <div class="card card--ok">
+        <h3>✔ 會列入查證的訊號</h3>
+        <ul>
+          <li><b>境外管理</b>：粉專透明度顯示管理員所在地在台灣以外，且內容主打台灣議題。</li>
+          <li><b>中資或官方背景</b>：有可查的公司登記、資金或人事關聯。</li>
+          <li><b>協同性造假行為</b>：多個粉專同步發相同內容、共用管理員或轉貼鏈。</li>
+          <li><b>粉專改名或轉手</b>：原本是美食／追星／購物頁，改名後轉做時事輿論。</li>
+          <li><b>內容農場模式</b>：大量轉載不標來源、農場網域導流。</li>
+          <li><b>AI 生成未標示</b>：批量生成的新聞型內容，或 prompt 外洩痕跡。</li>
+          <li><b>可查證的假訊息</b>：已被查核組織認定不實，且未更正。</li>
+        </ul>
+      </div>
+      <div class="card card--no">
+        <h3>✘ 不會收錄的情況</h3>
+        <ul>
+          <li><b>只是立場不同</b>：政治傾向、支持的政黨或候選人不是收錄理由。</li>
+          <li><b>個人帳號</b>：只收公開粉專與公眾人物專頁，不收一般私人帳號。</li>
+          <li><b>沒有依據的猜測</b>：「看起來很像」「用語怪怪的」單獨不成立。</li>
+          <li><b>商業競爭或私人恩怨</b>。</li>
+          <li><b>同名就一起算</b>：「靠北 XX」「我是 OO 人」這類常見命名，要逐一驗證，不會整批收錄。</li>
+          <li><b>已消失或無法查證的粉專</b>。</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">
+      清單分成四級：<span class="pill pill--danger">高風險</span>
+      <span class="pill pill--warning">需留意</span>
+      <span class="pill pill--info">提醒</span>
+      <span class="pill pill--safe">已澄清</span>。
+      「已澄清」是反向標記——用來保護那些<strong>名字相似但查證後無關</strong>的粉專，避免被誤認。
+    </p>
+  </section>
+
+  <section class="section" id="report">
+    <h2>檢舉表單</h2>
+    <p class="muted">
+      標示 <span class="req">*</span> 為必填。送出後會開啟 GitHub 頁面，內容已經幫你填好，
+      你只要按下 <b>Create</b> 就完成；沒有 GitHub 帳號的話，可以改用「複製內容」。
+    </p>
+
+    <form id="report-form" novalidate>
+      <div class="grid">
+        <label class="field">
+          <span>粉專名稱 <span class="req">*</span></span>
+          <input type="text" id="f-name" required placeholder="粉專顯示的完整名稱" />
+        </label>
+
+        <label class="field">
+          <span>粉專網址 <span class="req">*</span></span>
+          <input type="url" id="f-url" required placeholder="https://www.facebook.com/…" />
+          <small class="hint" id="url-hint">貼上粉專首頁網址，系統會自動解析出帳號代號。</small>
+        </label>
+      </div>
+
+      <fieldset class="field">
+        <legend>檢舉分類 <span class="req">*</span>（可複選）</legend>
+        <div class="checks" id="f-categories">
+          <label><input type="checkbox" value="境外管理（透明度顯示管理員在台灣以外）" /> 境外管理</label>
+          <label><input type="checkbox" value="中資或中國官方背景" /> 中資／官方背景</label>
+          <label><input type="checkbox" value="協同性造假行為（多粉專同步發文、共用管理員）" /> 協同性造假行為</label>
+          <label><input type="checkbox" value="粉專改名或轉手（原本經營其他主題）" /> 改名／轉手</label>
+          <label><input type="checkbox" value="內容農場模式（大量轉載不標來源）" /> 內容農場</label>
+          <label><input type="checkbox" value="AI 生成內容未標示" /> AI 生成未標示</label>
+          <label><input type="checkbox" value="散布已被查核認定的假訊息" /> 可查證的假訊息</label>
+          <label><input type="checkbox" value="其他" /> 其他</label>
+        </div>
+      </fieldset>
+
+      <label class="field">
+        <span>具體說明 <span class="req">*</span></span>
+        <textarea id="f-detail" rows="5" required minlength="30"
+          placeholder="請描述你觀察到什麼、什麼時候看到的。例如：透明度頁面顯示 3 位管理員位於香港，粉專 2023 年 8 月從「OO 美食」改名，改名後幾乎只發選舉相關內容。"></textarea>
+        <small class="hint" id="detail-hint">至少 30 字。寫得越具體，查證越快。</small>
+      </label>
+
+      <label class="field">
+        <span>佐證連結</span>
+        <textarea id="f-evidence" rows="3"
+          placeholder="一行一個連結：貼文網址、查核報告、新聞報導、截圖圖床連結…"></textarea>
+        <small class="hint">沒有連結也可以送出，但有佐證的檢舉會優先查證。</small>
+      </label>
+
+      <label class="field">
+        <span>透明度資訊觀察</span>
+        <textarea id="f-transparency" rows="3"
+          placeholder="粉專「關於 → 頁面透明度」看到的內容：建立日期、管理員所在地與人數、曾用名稱。"></textarea>
+        <small class="hint">這是最有力的依據。路徑：粉專頁 →「關於」→「頁面透明度」。</small>
+      </label>
+
+      <label class="field">
+        <span>聯絡方式（選填）</span>
+        <input type="text" id="f-contact" placeholder="GitHub 帳號或 email，方便查證時追問。會一起公開。" />
+      </label>
+
+      <label class="check-line">
+        <input type="checkbox" id="f-confirm" required />
+        <span>
+          我了解這則檢舉會<b>公開</b>，我填寫的是<b>可查證的觀察</b>而非個人猜測，
+          也了解<b>被檢舉不等於被收錄</b>，需要通過查證。 <span class="req">*</span>
+        </span>
+      </label>
+
+      <div class="actions">
+        <button type="submit" class="btn btn--primary">產生 GitHub Issue</button>
+        <button type="button" class="btn" id="btn-copy">複製內容</button>
+        <button type="button" class="btn" id="btn-reset">清空表單</button>
+      </div>
+      <p class="form-status" id="form-status" role="status"></p>
+    </form>
+
+    <details class="preview">
+      <summary>預覽送出的內容</summary>
+      <pre id="preview-body">（填寫表單後這裡會顯示）</pre>
+    </details>
+  </section>
+
+  <section class="section" id="list">
+    <h2>目前已收錄的清單</h2>
+    <p class="muted" id="list-summary">載入中…</p>
+
+    <div class="filters">
+      <input type="search" id="list-search" placeholder="搜尋粉專名稱、代號或依據" />
+      <select id="list-level">
+        <option value="">所有等級</option>
+        <option value="danger">高風險</option>
+        <option value="warning">需留意</option>
+        <option value="info">提醒</option>
+        <option value="safe">已澄清</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>粉專</th><th>比對依據</th><th>等級</th><th>收錄依據</th></tr>
+        </thead>
+        <tbody id="list-rows"></tbody>
+      </table>
+    </div>
+
+    <div class="gaps" id="list-gaps"></div>
+  </section>
+
+  <section class="section" id="appeal">
+    <h2>被列入清單？申訴與更正</h2>
+    <p>
+      如果你是粉專經營者，認為被列入有誤，請開一則 Issue 說明，並附上可以查證的資料
+      （頁面透明度截圖、公司登記、經營者說明）。查證後會有三種結果：
+    </p>
+    <ul class="plain">
+      <li><b>移除</b>——原本的依據站不住腳。</li>
+      <li><b>改標為「已澄清」</b>——名字相似但確認無關，之後逛到會顯示綠色提示而非警示。</li>
+      <li><b>維持並補充</b>——依據仍成立，但把你的說法一併記錄在依據裡。</li>
+    </ul>
+    <p>
+      <a class="btn" id="btn-appeal" href="#" target="_blank" rel="noopener">提出申訴</a>
+    </p>
+  </section>
+
+  <section class="section" id="faq">
+    <h2>常見問題</h2>
+    <details><summary>檢舉之後多久會處理？</summary>
+      <p>這是開源專案，由志願者查證，沒有服務時間的保證。附了透明度資訊與佐證連結的檢舉會快很多。</p></details>
+    <details><summary>收錄之後會發生什麼事？</summary>
+      <p>安裝擴充功能的人逛到該粉專時，頁面頂端會跳出警示卡，顯示等級與收錄依據；動態牆上該粉專的貼文也會被標記。警示只出現在使用者自己的瀏覽器裡，不會對粉專做任何事。</p></details>
+    <details><summary>我的檢舉內容會被公開嗎？</summary>
+      <p>會。表單會產生一則公開的 GitHub Issue，包含你填的所有欄位（含聯絡方式）。不想具名就留空聯絡方式。</p></details>
+    <details><summary>沒有 GitHub 帳號可以檢舉嗎？</summary>
+      <p>可以，按「複製內容」把整理好的文字複製下來，透過你方便的管道轉給維護者。註冊 GitHub 帳號是免費的，直接開 Issue 會最快。</p></details>
+    <details><summary>這份清單代表官方認定嗎？</summary>
+      <p>不代表。這是社群整理的參考清單，每一筆都附上依據讓你自己判斷，不構成對任何粉專、公司或個人的事實認定。</p></details>
+    <details><summary>會不會被拿來獵巫？</summary>
+      <p>這是設計時最在意的事，所以：收錄標準明確排除立場之爭與私人帳號、每筆都要附可複驗的依據、查證過程全公開、有申訴管道，也有「已澄清」這個反向標記保護同名粉專。看到不該收的，請開 Issue 指出來。</p></details>
+  </section>
+
+  <section class="section disclaimer">
+    <h2>免責聲明</h2>
+    <p>
+      本清單整理自公開資訊，每一筆附上依據，<strong>不構成對任何粉專、公司或個人的事實認定</strong>，
+      也不代表本專案對其內容的立場。清單可能有錯誤或過時；使用者採信與否、如何使用，請自行判斷並負責。
+      以粉專名稱比對的項目可能對到同名的其他粉專，請先確認透明度資訊再做判斷。
+    </p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>
+      <a href="https://github.com/mark780825/social_media_alert" target="_blank" rel="noopener">原始碼與清單資料</a>
+      ・<a href="https://github.com/mark780825/social_media_alert/issues" target="_blank" rel="noopener">所有檢舉與查證紀錄</a>
+      ・MIT License
+    </p>
+    <p class="muted">本頁面不使用 Cookie、不做追蹤、不蒐集任何瀏覽資料。</p>
+  </div>
+</footer>
+
+<script src="lib/matcher.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

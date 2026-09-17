@@ -20,6 +20,8 @@
     lastUrl: location.href,
     currentTarget: null,
     currentMatches: [],
+    currentAlerts: [],
+    lastReevaluate: 0,
     dismissedKeys: new Set(),
     scanScheduled: false,
     ready: false,
@@ -64,12 +66,29 @@
     return info ? info.label : '提醒';
   }
 
-  function meetsMinLevel(entry) {
-    return SMA.levelWeight(entry.level) >= SMA.levelWeight(state.settings.minLevel || 'info');
+  function splitMatches(matches) {
+    return SMA.splitMatches(matches, state.settings.minLevel || 'info');
   }
 
-  function filterMatches(matches) {
-    return (matches || []).filter(meetsMinLevel);
+  /**
+   * 目前頁面上的粉專顯示名稱候選字串。
+   * 清冊裡有些項目只查得到名稱、沒有網址代號，只能靠這個比對。
+   */
+  function pageNameCandidates() {
+    const out = [];
+    const title = (document.title || '')
+      .replace(/^\(\d+\+?\)\s*/, '')
+      .replace(/\s*[|｜]\s*(Facebook|Threads).*$/i, '')
+      .trim();
+    if (title) out.push(title);
+
+    const heading = document.querySelector('h1');
+    if (heading && heading.textContent) out.push(heading.textContent.trim());
+
+    const og = document.querySelector('meta[property="og:title"]');
+    if (og && og.content) out.push(og.content.trim());
+
+    return out;
   }
 
   function targetKey(target) {
@@ -112,6 +131,7 @@
     .bar { height: 6px; background: #d93025; }
     .bar.warning { background: #f29900; }
     .bar.info { background: #1a73e8; }
+    .bar.safe { background: #188038; }
     .body { padding: 14px 16px 12px; }
     .head { display: flex; align-items: center; gap: 8px; }
     .tag {
@@ -120,6 +140,7 @@
     }
     .tag.warning { background: #b06000; }
     .tag.info { background: #1a73e8; }
+    .tag.safe { background: #188038; }
     .title { font-size: 15px; font-weight: 700; flex: 1; }
     .close {
       border: none; background: transparent; font-size: 18px; line-height: 1;
@@ -142,6 +163,12 @@
     button.action:hover { background: #f8f9fa; }
     button.action.primary { background: #d93025; border-color: #d93025; color: #fff; }
     button.action.primary:hover { background: #b7261d; }
+    button.action.primary.safe { background: #188038; border-color: #188038; }
+    button.action.primary.safe:hover { background: #12692e; }
+    .note {
+      margin-top: 8px; padding: 7px 9px; border-radius: 8px;
+      background: #fef7e0; color: #7a4100; font-size: 12px; line-height: 1.45;
+    }
     .more { border-top: 1px solid #e8eaed; margin-top: 10px; padding-top: 8px; font-size: 13px; color: #5f6368; }
   `;
 
@@ -150,12 +177,13 @@
     if (host) host.remove();
   }
 
-  function showBanner(target, matches) {
+  function showBanner(target, matches, variant) {
     removeBanner();
     if (!matches.length) return;
 
+    const cleared = variant === 'cleared';
     const top = matches[0];
-    const level = SMA.highestLevel(matches) || 'warning';
+    const level = cleared ? 'safe' : (SMA.highestLevel(matches) || 'warning');
     const host = document.createElement('div');
     host.id = HOST_ID;
     const shadow = host.attachShadow({ mode: 'open' });
@@ -177,7 +205,7 @@
 
     const tag = document.createElement('span');
     tag.className = 'tag ' + level;
-    tag.textContent = '⚠ ' + levelLabel(level);
+    tag.textContent = (cleared ? '✔ ' : '⚠ ') + levelLabel(level);
 
     const title = document.createElement('span');
     title.className = 'title';
@@ -201,9 +229,19 @@
 
     const reason = document.createElement('div');
     reason.className = 'reason';
-    reason.textContent = top.reason || '這個帳號被列在你的警示清單中，請謹慎判斷內容真偽。';
+    reason.textContent = top.reason || (cleared
+      ? '這個帳號已被標註為「與被點名的對象無關」，不需要因為名稱相似而誤會。'
+      : '這個帳號被列在你的警示清單中，請謹慎判斷內容真偽。');
 
     body.append(head, handle, reason);
+
+    if (top._viaName) {
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = '這筆是用「粉專顯示名稱」比對的（清單裡沒有網址代號），'
+        + '同名粉專可能不是同一個，請自行確認粉專的透明度資訊再判斷。';
+      body.appendChild(note);
+    }
 
     if (top.tags && top.tags.length) {
       const tags = document.createElement('div');
@@ -233,7 +271,7 @@
     actions.className = 'actions';
 
     const ok = document.createElement('button');
-    ok.className = 'action primary';
+    ok.className = 'action primary' + (cleared ? ' safe' : '');
     ok.type = 'button';
     ok.textContent = '我知道了';
     ok.addEventListener('click', function () {
@@ -256,12 +294,12 @@
     shadow.append(style, wrap);
     (document.body || document.documentElement).appendChild(host);
 
-    reportAlerts(1);
+    if (!cleared) reportAlerts(1);
   }
 
   function sourceLabel(source) {
     if (!source || source === 'user') return '自行新增';
-    if (source === 'builtin') return '內建示範清單';
+    if (source === 'builtin') return '內建清單';
     if (String(source).indexOf('subscription') === 0) return '訂閱清單';
     return String(source);
   }
@@ -270,17 +308,23 @@
 
   function evaluateCurrentPage() {
     const result = SMA.matchUrl(state.index, location.href);
-    const matches = filterMatches(result.matches);
+    // 名稱比對只在帳號／粉專頁做，避免在動態牆上誤判同名內容。
+    const all = result.target
+      ? SMA.mergeMatches(result.matches, SMA.matchNames(state.index, pageNameCandidates()))
+      : result.matches;
+    const split = splitMatches(all);
+
     state.currentTarget = result.target;
-    state.currentMatches = matches;
+    state.currentMatches = all;
+    state.currentAlerts = split.alerts;
 
     sendMessage({
       type: 'PAGE_STATUS_CHANGED',
       payload: {
         url: location.href,
         target: result.target,
-        matchCount: matches.length,
-        level: SMA.highestLevel(matches)
+        matchCount: split.alerts.length,
+        level: SMA.highestLevel(split.alerts)
       }
     });
 
@@ -288,11 +332,19 @@
       removeBanner();
       return;
     }
-    if (!matches.length || state.dismissedKeys.has(targetKey(result.target))) {
+    if (state.dismissedKeys.has(targetKey(result.target))) {
       removeBanner();
       return;
     }
-    showBanner(result.target, matches);
+    if (split.alerts.length) {
+      showBanner(result.target, split.alerts, 'alert');
+      return;
+    }
+    if (split.cleared.length && state.settings.showClearedNotice) {
+      showBanner(result.target, split.cleared, 'cleared');
+      return;
+    }
+    removeBanner();
   }
 
   // ---------------------------------------------------------------- 貼文標記
@@ -367,7 +419,7 @@
       if (!href || href.charAt(0) === '#' || href.indexOf('javascript:') === 0) continue;
 
       const result = SMA.matchUrl(state.index, href);
-      const matches = filterMatches(result.matches);
+      const matches = splitMatches(result.matches).alerts;
       if (!matches.length) continue;
 
       markLink(link, matches);
@@ -401,6 +453,7 @@
       state.scanScheduled = false;
       try {
         scanLinks();
+        maybeReevaluate();
       } catch (err) {
         console.warn('[social-media-alert] 掃描失敗', err);
       }
@@ -410,6 +463,19 @@
     } else {
       setTimeout(run, 300);
     }
+  }
+
+  /**
+   * Facebook 是單頁式應用，粉專名稱常比網址晚幾百毫秒才更新，
+   * 因此在頁面還沒命中任何項目時，隔一段時間重新比對一次名稱。
+   */
+  function maybeReevaluate() {
+    if (!state.currentTarget) return;
+    if (state.currentMatches.length) return;
+    const now = Date.now();
+    if (now - state.lastReevaluate < 2000) return;
+    state.lastReevaluate = now;
+    evaluateCurrentPage();
   }
 
   function handleUrlChange() {

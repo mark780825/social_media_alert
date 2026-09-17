@@ -4,3 +4,8 @@ dist/
 .DS_Store
 .vscode/
 .idea/
+
+# 由 scripts/build-site.sh 從 data/ 與 src/ 複製產生
+site/data/
+site/lib/
+site/icon.png

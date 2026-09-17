@@ -15,7 +15,9 @@
   const LEVELS = {
     danger: { key: 'danger', label: '高風險', weight: 3 },
     warning: { key: 'warning', label: '需留意', weight: 2 },
-    info: { key: 'info', label: '提醒', weight: 1 }
+    info: { key: 'info', label: '提醒', weight: 1 },
+    // safe 代表「已查核、與被點名的對象無關」，用來避免同名粉專被誤認，不會發出警示。
+    safe: { key: 'safe', label: '已澄清', weight: 0 }
   };
 
   // Facebook 路徑第一段若落在這些保留字，就不是個人／粉專帳號。
@@ -61,6 +63,22 @@
     }
     handle = handle.replace(/^@+/, '').replace(/\/+$/, '').trim();
     return handle.toLowerCase();
+  }
+
+  /**
+   * 粉專顯示名稱正規化：去掉所有空白、統一全形符號與大小寫。
+   * 用於清冊裡只留下名稱、查不到網址代號的項目。
+   */
+  function normalizeName(value) {
+    if (!value) return '';
+    return String(value)
+      .replace(/[\s\u3000]+/g, '')
+      .replace(/＋/g, '+')
+      .replace(/[（]/g, '(')
+      .replace(/[）]/g, ')')
+      .replace(/[：]/g, ':')
+      .replace(/[／]/g, '/')
+      .toLowerCase();
   }
 
   function normalizeProfileId(value) {
@@ -177,21 +195,41 @@
     return keys;
   }
 
-  /** 把清單整理成查表用的 Map，避免每次比對都線性掃描。 */
+  function pushBucket(map, key, entry) {
+    const bucket = map.get(key);
+    if (bucket) bucket.push(entry);
+    else map.set(key, [entry]);
+  }
+
+  /**
+   * 把清單整理成查表結構，避免每次比對都線性掃描。
+   * keys：以平台＋網址代號查詢；names：以粉專顯示名稱查詢。
+   */
   function buildIndex(entries) {
-    const index = new Map();
+    const keys = new Map();
+    const names = new Map();
+    let size = 0;
+
     (entries || []).forEach(function (entry) {
       if (!entry) return;
+      size += 1;
       entryKeys(entry).forEach(function (key) {
-        const bucket = index.get(key);
-        if (bucket) {
-          bucket.push(entry);
-        } else {
-          index.set(key, [entry]);
-        }
+        pushBucket(keys, key, entry);
+      });
+      (entry.nameMatch || []).forEach(function (name) {
+        const normalized = normalizeName(name);
+        if (normalized) pushBucket(names, normalized, entry);
       });
     });
-    return index;
+
+    return { keys: keys, names: names, size: size };
+  }
+
+  /** 相容舊呼叫：buildIndex 以前直接回傳 Map。 */
+  function keyMap(index) {
+    if (!index) return new Map();
+    if (index instanceof Map) return index;
+    return index.keys || new Map();
   }
 
   function levelWeight(level) {
@@ -202,10 +240,11 @@
   /** 以解析出的目標查詢清單，回傳命中的項目（嚴重度高的排前面）。 */
   function matchTarget(index, target) {
     if (!index || !target || !target.value) return [];
+    const map = keyMap(index);
     const key = target.platform + '|' + target.kind + '|' + target.value;
-    const hits = index.get(key) || [];
+    const hits = map.get(key) || [];
     const anyKey = PLATFORM.ANY + '|' + target.kind + '|' + target.value;
-    const anyHits = index.get(anyKey) || [];
+    const anyHits = map.get(anyKey) || [];
     const merged = hits.concat(anyHits.filter(function (entry) {
       return hits.indexOf(entry) === -1;
     }));
@@ -219,6 +258,51 @@
     const target = parseProfileTarget(url);
     if (!target) return { target: null, matches: [] };
     return { target: target, matches: matchTarget(index, target) };
+  }
+
+  /**
+   * 以粉專顯示名稱比對清單。命中的項目會複製一份並標上 _viaName，
+   * 讓介面能提醒使用者「這是用名稱比對的，請自行確認是不是同一個粉專」。
+   */
+  function matchNames(index, candidates) {
+    if (!index || !index.names || !candidates || !candidates.length) return [];
+    const seen = new Set();
+    const results = [];
+
+    candidates.forEach(function (candidate) {
+      const normalized = normalizeName(candidate);
+      if (!normalized) return;
+      (index.names.get(normalized) || []).forEach(function (entry) {
+        if (seen.has(entry.id)) return;
+        seen.add(entry.id);
+        results.push(Object.assign({}, entry, { _viaName: true }));
+      });
+    });
+
+    return results.sort(function (a, b) {
+      return levelWeight(b.level) - levelWeight(a.level);
+    });
+  }
+
+  /** 合併網址代號與名稱兩種命中結果，網址代號的結果優先。 */
+  function mergeMatches(keyMatches, nameMatches) {
+    const ids = new Set((keyMatches || []).map(function (entry) { return entry.id; }));
+    const extra = (nameMatches || []).filter(function (entry) { return !ids.has(entry.id); });
+    return (keyMatches || []).concat(extra).sort(function (a, b) {
+      return levelWeight(b.level) - levelWeight(a.level);
+    });
+  }
+
+  /** 把命中結果拆成「要警示的」與「已澄清的」。 */
+  function splitMatches(matches, minLevel) {
+    const floor = levelWeight(minLevel || 'info');
+    const alerts = [];
+    const cleared = [];
+    (matches || []).forEach(function (entry) {
+      if (entry.level === 'safe') cleared.push(entry);
+      else if (levelWeight(entry.level) >= floor) alerts.push(entry);
+    });
+    return { alerts: alerts, cleared: cleared };
   }
 
   function highestLevel(matches) {
@@ -269,6 +353,13 @@
     entry.profileId = normalizeProfileId(entry.profileId);
     entry.name = (entry.name || '').trim();
     entry.reason = (entry.reason || '').trim();
+    if (Array.isArray(entry.nameMatch)) {
+      entry.nameMatch = entry.nameMatch.map(function (n) { return String(n).trim(); }).filter(Boolean);
+    } else if (entry.nameMatch) {
+      entry.nameMatch = [String(entry.nameMatch).trim()].filter(Boolean);
+    } else {
+      entry.nameMatch = [];
+    }
     entry.tags = Array.isArray(entry.tags)
       ? entry.tags.map(function (t) { return String(t).trim(); }).filter(Boolean)
       : [];
@@ -279,7 +370,9 @@
   }
 
   function isValidEntry(entry) {
-    return Boolean(entry && (entry.handle || entry.profileId || entry.groupId));
+    if (!entry) return false;
+    return Boolean(entry.handle || entry.profileId || entry.groupId
+      || (entry.nameMatch && entry.nameMatch.length));
   }
 
   function describeTarget(target) {
@@ -293,11 +386,15 @@
     PLATFORM: PLATFORM,
     LEVELS: LEVELS,
     normalizeHandle: normalizeHandle,
+    normalizeName: normalizeName,
     normalizeProfileId: normalizeProfileId,
     platformFromHost: platformFromHost,
     parseProfileTarget: parseProfileTarget,
     buildIndex: buildIndex,
     matchTarget: matchTarget,
+    matchNames: matchNames,
+    mergeMatches: mergeMatches,
+    splitMatches: splitMatches,
     matchUrl: matchUrl,
     highestLevel: highestLevel,
     levelWeight: levelWeight,

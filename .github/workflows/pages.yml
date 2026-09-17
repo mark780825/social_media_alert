@@ -1,0 +1,45 @@
+name: 部署檢舉頁到 GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'site/**'
+      - 'data/default-list.json'
+      - 'src/common/matcher.js'
+      - 'scripts/build-site.sh'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 組出網站內容
+        run: bash scripts/build-site.sh
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

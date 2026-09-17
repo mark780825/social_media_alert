@@ -18,6 +18,7 @@
       <label class="check"><input type="checkbox" id="set-banner" /> 進入帳號／粉專頁時顯示頂端警示橫幅</label>
       <label class="check"><input type="checkbox" id="set-feed" /> 在動態牆的貼文與連結上加註標記</label>
       <label class="check"><input type="checkbox" id="set-dim" /> 為被標記的貼文加上外框</label>
+      <label class="check"><input type="checkbox" id="set-cleared" /> 遇到「已澄清」的帳號時顯示綠色提示（避免同名混淆）</label>
       <label class="field">
         <span>最低顯示等級</span>
         <select id="set-min-level">
@@ -67,6 +68,10 @@
           <input type="text" id="new-profile-id" placeholder="profile.php?id= 後面的數字" />
         </label>
         <label class="field">
+          <span>比對粉專名稱（查不到網址代號時用，多個以逗號分隔）</span>
+          <input type="text" id="new-name-match" placeholder="例如：靠北醫生" />
+        </label>
+        <label class="field">
           <span>顯示名稱</span>
           <input type="text" id="new-name" placeholder="例如：假投資粉專" />
         </label>
@@ -76,6 +81,7 @@
             <option value="danger">高風險</option>
             <option value="warning" selected>需留意</option>
             <option value="info">提醒</option>
+            <option value="safe">已澄清（不警示）</option>
           </select>
         </label>
         <label class="field">
@@ -97,6 +103,7 @@
         <div class="row">
           <button class="btn" id="btn-export">匯出 JSON</button>
           <button class="btn" id="btn-import">匯入 JSON</button>
+          <button class="btn" id="btn-reload-builtin">重新載入內建清單</button>
           <button class="btn btn--danger" id="btn-clear">清空自訂清單</button>
           <input type="file" id="file-import" accept="application/json,.json" hidden />
         </div>
@@ -114,6 +121,7 @@
           <option value="danger">高風險</option>
           <option value="warning">需留意</option>
           <option value="info">提醒</option>
+          <option value="safe">已澄清</option>
         </select>
       </div>
       <table class="table">
