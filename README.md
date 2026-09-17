@@ -80,8 +80,12 @@ Chrome / Edge / Brave 等 Chromium 瀏覽器：
 ### 啟用
 
 1. GitHub repo → **Settings → Pages → Source** 選 **GitHub Actions**。
+   這一步只能手動做，workflow 自己做不到——`GITHUB_TOKEN` 沒有建立 Pages 站台的權限。
 2. 把分支合併進 `main`（或到 Actions 頁手動執行「部署檢舉頁到 GitHub Pages」）。
 3. 網址為 `https://<你的帳號>.github.io/social_media_alert/`。
+
+如果部署失敗在 `configure-pages` 並顯示 `Get Pages site failed ... Not Found`，
+就是第 1 步還沒做；設定完再到 Actions 頁重跑一次即可。
 
 `data/default-list.json` 或 `src/common/matcher.js` 有更動時會自動重新部署，
 網站與擴充功能共用同一份資料，不會有兩份清單不同步的問題。
