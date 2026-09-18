@@ -3,7 +3,11 @@
   "name": "社群媒體警示 (Social Media Alert)",
   "version": "0.1.0",
   "description": "瀏覽 Facebook / Threads 時，自動標示清單中的可疑粉專或帳號，並跳出警示提醒。",
-  "permissions": ["storage", "tabs", "alarms"],
+  "homepage_url": "https://mark780825.github.io/social_media_alert/",
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
   "host_permissions": [
     "*://*.facebook.com/*",
     "*://*.threads.net/*",
@@ -19,8 +23,14 @@
         "*://*.threads.net/*",
         "*://*.threads.com/*"
       ],
-      "js": ["src/common/matcher.js", "src/common/storage.js", "src/content/content.js"],
-      "css": ["src/content/content.css"],
+      "js": [
+        "src/common/matcher.js",
+        "src/common/storage.js",
+        "src/content/content.js"
+      ],
+      "css": [
+        "src/content/content.css"
+      ],
       "run_at": "document_idle",
       "all_frames": false
     }

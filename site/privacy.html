@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>隱私權政策｜社群媒體警示</title>
+<meta name="description" content="社群媒體警示瀏覽器擴充功能的隱私權政策：不蒐集任何個人資料、不追蹤瀏覽紀錄，所有清單與設定都存在使用者本機。" />
+<link rel="icon" type="image/png" href="icon.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero__badge">⚠ 社群媒體警示</div>
+    <h1>隱私權政策</h1>
+    <p class="hero__lead">
+      一句話總結：這個擴充功能<strong>不蒐集你的任何資料</strong>，不知道你看了什麼，
+      也沒有任何伺服器可以接收你的資料。
+    </p>
+    <p class="hero__note">最後更新：2026 年 9 月 18 日</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <h2>我們蒐集哪些資料</h2>
+    <p><strong>沒有。一項都沒有。</strong></p>
+    <p class="muted">
+      具體來說，這個擴充功能不蒐集也不傳送：個人識別資訊、健康或財務資訊、身分驗證資訊、
+      個人通訊內容、位置、瀏覽紀錄、使用者活動（點擊、滑鼠位置、按鍵）、以及網站內容。
+    </p>
+    <p>
+      擴充功能沒有後端伺服器。開發者無法看到任何使用者的清單、設定或瀏覽行為，
+      因為這些資料從來沒有離開過你的瀏覽器。
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>資料存在哪裡</h2>
+    <p>
+      你的警示清單、設定與提醒次數統計，全部存放在瀏覽器本機的
+      <code>chrome.storage.local</code>，只有這個擴充功能能讀取。
+    </p>
+    <ul class="plain">
+      <li>移除擴充功能時，這些資料會一併被瀏覽器刪除。</li>
+      <li>你可以隨時在設定頁匯出成 JSON 檔備份，或清空全部項目。</li>
+      <li>資料不會同步到雲端，換一台電腦就是一份新的空清單。</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>唯一的對外連線</h2>
+    <p>
+      擴充功能只有在一種情況下會連上外部網路：<strong>你自己在設定頁填入了「訂閱清單」網址</strong>。
+      這時它會定期下載該網址的 JSON 清單。
+    </p>
+    <ul class="plain">
+      <li>下載是單向的——只取得清單內容，<strong>不會送出任何關於你的資訊</strong>。</li>
+      <li>沒填訂閱網址，就完全不連外。這是預設狀態。</li>
+      <li>你填的網址由你選擇，該網站的隱私權政策適用於那次連線。</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>權限用途</h2>
+    <p class="muted">安裝時 Chrome 會列出以下權限，這裡說明每一項的實際用途：</p>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>權限</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ident">storage</td>
+            <td>在本機儲存你的警示清單與設定。不含任何遠端儲存。</td>
+          </tr>
+          <tr>
+            <td class="ident">alarms</td>
+            <td>當你啟用訂閱清單的自動更新時，用來安排定期更新的時間。</td>
+          </tr>
+          <tr>
+            <td class="ident">facebook.com<br />threads.net<br />threads.com</td>
+            <td>
+              在這三個網站上比對目前頁面的帳號、顯示警示橫幅與貼文標記。
+              比對完全在你的瀏覽器內完成。擴充功能<strong>讀不到其他網站</strong>的任何內容或網址。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">
+      擴充功能不使用 <code>tabs</code> 權限，因此看不到你其他分頁的網址；
+      在 Facebook 與 Threads 以外的頁面，它完全不會執行。
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>不做的事</h2>
+    <ul class="plain">
+      <li>不使用任何分析、統計或追蹤服務。</li>
+      <li>不使用 Cookie，也不寫入任何追蹤識別碼。</li>
+      <li>不販售、不出租、不轉讓任何資料——因為根本沒有資料可以轉讓。</li>
+      <li>不會把你的資料用於與核心功能無關的用途。</li>
+      <li>不會為了判斷債信、貸款資格等目的使用資料。</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>網站（檢舉頁）的部分</h2>
+    <p>
+      本專案的檢舉頁由 GitHub Pages 託管，同樣不使用 Cookie、不做追蹤、沒有分析工具。
+      你在檢舉表單填寫的內容，只有在你按下送出、並在 GitHub 上實際建立 Issue 之後才會送出，
+      屆時那些內容會成為<strong>公開的 GitHub Issue</strong>。填寫但未送出的內容不會離開你的瀏覽器。
+    </p>
+    <p class="muted">
+      GitHub 對其服務有自己的隱私權政策，請參閱
+      <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>。
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>政策變更</h2>
+    <p>
+      若日後政策有變動，會更新本頁的「最後更新」日期，並在
+      <a href="https://github.com/mark780825/social_media_alert" target="_blank" rel="noopener">GitHub 專案</a>
+      留下紀錄。所有變更都會反映在公開的原始碼裡——這個擴充功能是開源的，
+      任何人都可以檢查它實際做了什麼。
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>聯絡方式</h2>
+    <p>
+      有任何疑問，請在
+      <a href="https://github.com/mark780825/social_media_alert/issues" target="_blank" rel="noopener">GitHub Issues</a>
+      提出。
+    </p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>
+      <a href="./">回到檢舉頁</a>
+      ・<a href="https://github.com/mark780825/social_media_alert" target="_blank" rel="noopener">原始碼</a>
+      ・MIT License
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
