@@ -92,7 +92,7 @@ https://github.com/mark780825/social_media_alert
 
 | 用途 | 檔案 | 尺寸 |
 | --- | --- | --- |
-| 商店圖示 | `icons/icon128.png` | 128×128 |
+| 商店圖示 | `store-assets/store-icon-128.png` | 128×128 |
 | 螢幕擷取畫面 1 | `store-assets/01-warning-banner.png` | 1280×800 |
 | 螢幕擷取畫面 2 | `store-assets/02-feed-marks.png` | 1280×800 |
 | 螢幕擷取畫面 3 | `store-assets/03-cleared-notice.png` | 1280×800 |
@@ -101,6 +101,11 @@ https://github.com/mark780825/social_media_alert
 | 小型宣傳圖磚 | `store-assets/promo-tile-440x280.png` | 440×280 |
 
 截圖使用中性的示範資料（「範例粉專 A／B／C」），用意是展示功能而非公開指認特定對象。
+
+**商店圖示要單獨上傳**，不會自動從套件抓。Google 的規範是畫布 128×128、
+實際圖形 96×96 置中、四周留 16px 透明邊距，因此商店用的是
+`store-assets/store-icon-128.png`（帶留白），而不是套件裡的 `icons/icon128.png`
+（滿版，那是給工具列用的）。兩者不要混用。
 
 ## 五、隱私權分頁（Privacy practices）
 
