@@ -176,16 +176,31 @@ src/background/            service worker：示範清單、徽章、訂閱更新
 src/popup/                 工具列彈出視窗
 src/options/               設定與清單管理頁
 data/default-list.json     安裝時載入的內建清單（網站與擴充功能共用）
-site/                      對外公開的檢舉頁（GitHub Pages）
+site/                      對外公開的檢舉頁與隱私權政策（GitHub Pages）
+store-assets/              Chrome 線上應用程式商店的截圖與宣傳圖磚
+docs/chrome-store.md       上架指南（文案、權限理由、審查注意事項）
 docs/review-process.md     維護者的查證流程
 .github/ISSUE_TEMPLATE/    檢舉與申訴的 Issue 範本
 test/                      單元測試
 ```
 
+## 上架 Chrome 線上應用程式商店
+
+素材與逐步說明都準備好了：
+
+- **上架指南**：[docs/chrome-store.md](docs/chrome-store.md) —— 商店文案、權限理由、
+  隱私權聲明填法、審查常見問題，多數欄位可直接複製貼上。
+- **圖形素材**：`store-assets/` —— 5 張 1280×800 截圖與 1 張 440×280 宣傳圖磚。
+- **隱私權政策**：https://mark780825.github.io/social_media_alert/privacy.html
+- **套件**：`npm run build` 產生 `dist/social-media-alert-<版本>.zip`。
+
+需要一次性的 5 美元開發者註冊費。建議先以「未列出」發布，確認沒問題再轉公開。
+
 ## 隱私
 
 - 所有清單與設定都存在瀏覽器本機的 `chrome.storage.local`。
 - 擴充功能只在 `facebook.com`、`threads.net`、`threads.com` 執行。
+- 只宣告 `storage` 與 `alarms` 兩個權限；**不使用 `tabs` 權限**，因此讀不到其他分頁的網址。
 - 唯一的對外連線是**你自己填寫的訂閱清單網址**；沒有填就完全不連外。
 - 不蒐集、不上傳任何瀏覽紀錄或個人資料。
 
