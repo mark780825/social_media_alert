@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>安裝與清單更新教學｜社群媒體警示</title>
+<meta name="description" content="如何安裝社群媒體警示擴充功能，以及如何訂閱或匯入最新的警示清單。附逐步截圖。" />
+<link rel="icon" type="image/png" href="icon.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero__badge">⚠ 社群媒體警示</div>
+    <h1>安裝與清單更新教學</h1>
+    <p class="hero__lead">
+      從安裝到讓清單自動保持最新，一共三分鐘。下面每一步都附截圖。
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#install">1. 安裝</a>
+      <a class="btn" href="#subscribe">2. 訂閱清單</a>
+      <a class="btn" href="#import">替代：手動匯入</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="install">
+    <h2>第一步：安裝擴充功能</h2>
+    <ol class="steps">
+      <li>用 <b>Chrome</b>（或 Edge、Brave 等 Chromium 瀏覽器）打開
+        <a href="https://chromewebstore.google.com/detail/nhahfkoiefgggofmbnkdkfpkfjffnbof" target="_blank" rel="noopener">商店頁面</a></li>
+      <li>按「<b>加到 Chrome</b>」→「<b>新增擴充功能</b>」</li>
+      <li>安裝完成後，工具列會出現 <b>⚠</b> 圖示（找不到的話點工具列的拼圖圖示，把它固定起來）</li>
+    </ol>
+
+    <div class="callout callout--warn">
+      <b>之前用「載入未封裝項目」裝過的人請先移除舊版。</b>
+      兩份同時執行的話，同一個粉專會跳出兩個警示橫幅。
+      到 <code>chrome://extensions</code> 把舊的那份移除即可。
+    </div>
+
+    <p class="muted">
+      安裝後就已經內建一份清單，可以直接開始用。但清單會隨著查證陸續更新，
+      所以建議接著做第二步。
+    </p>
+  </section>
+
+  <section class="section" id="subscribe">
+    <h2>第二步：訂閱清單（建議）</h2>
+    <p class="muted">
+      設定一次，之後清單更新就會自動同步，不用再回來操作。
+    </p>
+
+    <h3 class="step-title">2-1　複製訂閱網址</h3>
+    <div class="copy-row">
+      <input type="text" id="feed-url" readonly
+        value="https://raw.githubusercontent.com/mark780825/social_media_alert/main/data/default-list.json" />
+      <button class="btn btn--primary" id="btn-copy-url" type="button">複製</button>
+    </div>
+    <small class="hint" id="copy-hint">按「複製」，接著回到瀏覽器貼上。</small>
+
+    <h3 class="step-title">2-2　打開設定頁</h3>
+    <p>點工具列的 <b>⚠</b> 圖示，按底部的「<b>管理清單與設定</b>」。</p>
+    <figure class="shot">
+      <img src="img/guide-1-popup.png" alt="擴充功能彈出視窗，底部的「管理清單與設定」按鈕被標示為步驟 1" />
+      <figcaption>① 點「管理清單與設定」</figcaption>
+    </figure>
+
+    <h3 class="step-title">2-3　貼上網址並更新</h3>
+    <p>在右上角的「<b>訂閱清單</b>」區塊：</p>
+    <figure class="shot">
+      <img src="img/guide-2-subscribe.png" alt="設定頁的訂閱清單區塊，依序標示訂閱網址欄位、自動定期更新勾選框、立即更新按鈕" />
+      <figcaption>① 貼上網址　② 勾選「自動定期更新」　③ 按「立即更新」</figcaption>
+    </figure>
+
+    <h3 class="step-title">2-4　確認成功</h3>
+    <p>下方會出現綠色的同步筆數與時間，代表完成了。</p>
+    <figure class="shot">
+      <img src="img/guide-3-done.png" alt="訂閱區塊下方顯示綠色訊息，說明已同步的筆數與更新時間" />
+      <figcaption>顯示「已同步 ○○ 筆」就成功了</figcaption>
+    </figure>
+
+    <div class="callout">
+      <b>之後就不用管了。</b>
+      擴充功能會依你設定的間隔（預設 12 小時）自動同步最新清單。
+      想立刻更新時，回到這裡按一次「立即更新」即可。
+    </div>
+  </section>
+
+  <section class="section" id="import">
+    <h2>替代做法：手動匯入 JSON</h2>
+    <p class="muted">
+      不想設定自動更新的話，也可以下載檔案手動匯入。
+      缺點是<strong>之後清單更新時不會自動同步</strong>，要再匯入一次。
+    </p>
+    <ol class="steps">
+      <li>在<a href="./#use-list">檢舉頁</a>按「<b>下載 JSON 檔</b>」</li>
+      <li>打開擴充功能的設定頁，捲到「<b>警示清單</b>」區塊</li>
+      <li>按「<b>匯入 JSON</b>」，選擇剛下載的檔案</li>
+    </ol>
+    <figure class="shot">
+      <img src="img/guide-4-import.png" alt="設定頁警示清單區塊上方的「匯入 JSON」按鈕被標示出來" />
+      <figcaption>① 按「匯入 JSON」後選擇下載的檔案</figcaption>
+    </figure>
+    <p class="muted">
+      匯入是<strong>累加</strong>的，已經存在的項目會自動略過，不會產生重複。
+    </p>
+  </section>
+
+  <section class="section" id="faq">
+    <h2>常見問題</h2>
+
+    <details><summary>訂閱之後，設定頁的清單筆數變兩倍？</summary>
+      <p>
+        正常的。內建清單與訂閱清單是分開存放的（設定頁底部會寫「內建 ○○ 筆、訂閱 ○○ 筆」），
+        兩份內容目前相同，所以看起來像兩倍。
+      </p>
+      <p>
+        <strong>不會造成重複警示</strong>——內容完全相同的項目在比對時會自動合併，
+        警示卡只會出現一次。想讓列表清爽一點的話，可以按「清空自訂清單」把內建那份刪掉，
+        之後完全以訂閱為準。
+      </p>
+    </details>
+
+    <details><summary>多久會自動更新一次？</summary>
+      <p>依「更新間隔」的設定，預設 12 小時，最短 30 分鐘。瀏覽器關閉期間不會更新，重新開啟後會補上。</p>
+    </details>
+
+    <details><summary>逛 Facebook 沒看到任何警示？</summary>
+      <p>依序檢查：</p>
+      <ul class="plain">
+        <li>設定頁最上方的「<b>啟用警示功能</b>」有沒有勾選</li>
+        <li>「<b>最低顯示等級</b>」是不是設成「只顯示高風險」，把較低等級的標記濾掉了</li>
+        <li>你瀏覽的粉專是否真的在清單中——可以在設定頁搜尋它的網址代號確認</li>
+        <li>剛安裝完的話，重新整理一下已經開著的 Facebook 分頁</li>
+      </ul>
+    </details>
+
+    <details><summary>可以用自己的清單嗎？</summary>
+      <p>
+        可以。設定頁能逐筆新增、刪除，也能匯出成 JSON 備份。
+        你也可以把訂閱網址換成任何你信任的來源，格式相同即可
+        （格式說明見 <a href="https://github.com/mark780825/social_media_alert/blob/main/docs/list-format.md" target="_blank" rel="noopener">list-format.md</a>）。
+      </p>
+    </details>
+
+    <details><summary>這份清單可靠嗎？</summary>
+      <p>
+        清單整理自公開報導中被具名的粉專，<strong>每一筆都附上依據來源</strong>，你可以自己重新查證。
+        它是參考資料，不是事實認定。收錄標準、查證流程與申訴管道都公開在
+        <a href="./#criteria">檢舉頁</a>上。
+      </p>
+    </details>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>
+      <a href="./">檢舉頁</a>
+      ・<a href="privacy.html">隱私權政策</a>
+      ・<a href="https://github.com/mark780825/social_media_alert" target="_blank" rel="noopener">原始碼</a>
+      ・MIT License
+    </p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('btn-copy-url').addEventListener('click', async function () {
+    const input = document.getElementById('feed-url');
+    const hint = document.getElementById('copy-hint');
+    try {
+      await navigator.clipboard.writeText(input.value);
+      hint.textContent = '✔ 已複製，接著照下面的步驟貼上。';
+      hint.className = 'hint hint--ok';
+    } catch (err) {
+      input.select();
+      hint.textContent = '瀏覽器不允許自動複製，網址已選取，請按 Ctrl/Cmd + C。';
+      hint.className = 'hint hint--warn';
+    }
+  });
+</script>
+</body>
+</html>

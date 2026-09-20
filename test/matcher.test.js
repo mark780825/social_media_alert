@@ -164,3 +164,39 @@ test('mergeMatches 以網址代號的結果優先且不重複', () => {
   assert.strictEqual(merged[0].id, 'y');
   assert.strictEqual(merged.find((m) => m.id === 'x')._viaName, undefined);
 });
+
+test('內建與訂閱清單是同一份資料時不會重複警示', () => {
+  const builtin = SMA.normalizeEntryInput({
+    platform: 'facebook', handle: 'same.page', level: 'warning',
+    reason: '相同的依據', source: 'builtin'
+  });
+  // 訂閱來的同一筆：內容一樣，只有 id 與 source 不同
+  const subscribed = SMA.normalizeEntryInput({
+    platform: 'facebook', handle: 'same.page', level: 'warning',
+    reason: '相同的依據', source: 'subscription:https://example.com/list.json'
+  });
+  const index = SMA.buildIndex([builtin, subscribed]);
+
+  const result = SMA.matchUrl(index, 'https://www.facebook.com/same.page');
+  assert.strictEqual(result.matches.length, 1, '同內容的重複項目應只顯示一筆');
+});
+
+test('理由不同的兩筆標記都會保留', () => {
+  const index = SMA.buildIndex([
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'same.page', level: 'warning', reason: '依據 A' }),
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'same.page', level: 'warning', reason: '依據 B' })
+  ]);
+  const result = SMA.matchUrl(index, 'https://www.facebook.com/same.page');
+  assert.strictEqual(result.matches.length, 2, '不同依據視為不同標記，應全部保留');
+});
+
+test('去重後仍以最高等級排在最前面', () => {
+  const index = SMA.buildIndex([
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'dup2', level: 'info', reason: '低' }),
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'dup2', level: 'info', reason: '低' }),
+    SMA.normalizeEntryInput({ platform: 'facebook', handle: 'dup2', level: 'danger', reason: '高' })
+  ]);
+  const result = SMA.matchUrl(index, 'https://www.facebook.com/dup2');
+  assert.strictEqual(result.matches.length, 2);
+  assert.strictEqual(result.matches[0].level, 'danger');
+});

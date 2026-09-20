@@ -24,6 +24,7 @@
     <div class="hero__actions">
       <a class="btn btn--primary" href="#report">我要檢舉</a>
       <a class="btn" href="#list">查看目前清單</a>
+      <a class="btn" href="guide.html">安裝與訂閱教學</a>
       <a class="btn" href="#criteria">收錄標準</a>
     </div>
     <p class="hero__note">
@@ -199,6 +200,39 @@
     </div>
 
     <div class="gaps" id="list-gaps"></div>
+  </section>
+
+  <section class="section" id="use-list">
+    <h2>在擴充功能中使用這份清單</h2>
+    <p class="muted">
+      擴充功能安裝時就內建了這份清單，但清單會隨著查證陸續更新。
+      設定<strong>訂閱網址</strong>之後，擴充功能會自動同步最新版本，不必重新安裝。
+    </p>
+
+    <div class="field">
+      <span>訂閱網址</span>
+      <div class="copy-row">
+        <input type="text" id="feed-url" readonly
+          value="https://raw.githubusercontent.com/mark780825/social_media_alert/main/data/default-list.json" />
+        <button class="btn btn--primary" id="btn-copy-url" type="button">複製</button>
+      </div>
+      <small class="hint" id="copy-hint">貼到擴充功能設定頁的「訂閱清單」欄位。</small>
+    </div>
+
+    <ol class="steps">
+      <li>點瀏覽器工具列的 <b>⚠</b> 圖示 → <b>管理清單與設定</b></li>
+      <li>在「<b>訂閱清單</b>」區塊貼上上面的網址</li>
+      <li>勾選「<b>自動定期更新</b>」，再按「<b>立即更新</b>」</li>
+    </ol>
+
+    <p>
+      <a class="btn" href="guide.html">圖解教學（含逐步截圖）</a>
+      <a class="btn" href="data/default-list.json" download="social-media-alert-list.json">下載 JSON 檔</a>
+    </p>
+    <p class="muted">
+      下載的檔案可以用設定頁的「匯入 JSON」載入，適合不想設定自動更新的人；
+      但手動匯入的清單不會自動同步，之後要再匯入一次才會更新。
+    </p>
   </section>
 
   <section class="section" id="appeal">

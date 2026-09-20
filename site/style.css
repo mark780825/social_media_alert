@@ -311,3 +311,66 @@ input.invalid, textarea.invalid { border-color: var(--danger); background: var(-
   text-align: center;
 }
 .footer p { margin: 4px 0; }
+
+/* ---------------------------------------------------------------- 訂閱網址 */
+
+.copy-row { display: flex; gap: 8px; align-items: stretch; }
+.copy-row input {
+  flex: 1; min-width: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+.copy-row .btn { white-space: nowrap; }
+
+.steps { margin: 16px 0; padding-left: 22px; font-size: 15px; line-height: 1.8; }
+.steps li { margin-bottom: 4px; }
+
+#use-list .btn { margin-right: 8px; margin-bottom: 8px; }
+
+/* ---------------------------------------------------------------- 教學頁 */
+
+.step-title {
+  margin: 26px 0 10px;
+  font-size: 16px;
+  padding-left: 10px;
+  border-left: 4px solid var(--danger);
+}
+
+.shot {
+  margin: 14px 0 22px;
+  padding: 0;
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+.shot figcaption {
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.callout {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--info-bg);
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+.callout--warn { background: var(--warning-bg); }
+.callout code {
+  background: rgba(0, 0, 0, .06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+@media (prefers-color-scheme: dark) {
+  .callout code { background: rgba(255, 255, 255, .1); }
+}
