@@ -264,6 +264,25 @@
       '（頁面透明度截圖、公司登記、經營說明等）'
     ].join('\n'));
 
+  // ------------------------------------------------------------ 訂閱網址
+
+  const copyBtn = $('btn-copy-url');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async function () {
+      const input = $('feed-url');
+      const hint = $('copy-hint');
+      try {
+        await navigator.clipboard.writeText(input.value);
+        hint.textContent = '✔ 已複製，貼到擴充功能設定頁的「訂閱清單」欄位。';
+        hint.className = 'hint hint--ok';
+      } catch (err) {
+        input.select();
+        hint.textContent = '瀏覽器不允許自動複製，網址已選取，請按 Ctrl/Cmd + C。';
+        hint.className = 'hint hint--warn';
+      }
+    });
+  }
+
   // ------------------------------------------------------------ 已收錄清單
 
   const LEVEL_LABEL = { danger: '高風險', warning: '需留意', info: '提醒', safe: '已澄清' };

@@ -232,6 +232,23 @@
     return index.keys || new Map();
   }
 
+  /**
+   * 去除內容完全相同的重複項目。
+   * 常見情境：使用者訂閱的清單與內建清單是同一份資料，
+   * 兩邊都會命中，若不處理就會在警示卡上顯示「另外還有 N 筆」。
+   * 理由不同的項目視為不同標記，會全部保留。
+   */
+  function dedupe(entries) {
+    const seen = new Set();
+    return (entries || []).filter(function (entry) {
+      const key = [entry.platform, entry.handle, entry.profileId, entry.groupId,
+        entry.level, entry.reason].join('|');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
   function levelWeight(level) {
     const info = LEVELS[level];
     return info ? info.weight : 0;
@@ -248,7 +265,7 @@
     const merged = hits.concat(anyHits.filter(function (entry) {
       return hits.indexOf(entry) === -1;
     }));
-    return merged.slice().sort(function (a, b) {
+    return dedupe(merged).sort(function (a, b) {
       return levelWeight(b.level) - levelWeight(a.level);
     });
   }
@@ -279,7 +296,7 @@
       });
     });
 
-    return results.sort(function (a, b) {
+    return dedupe(results).sort(function (a, b) {
       return levelWeight(b.level) - levelWeight(a.level);
     });
   }
@@ -288,7 +305,7 @@
   function mergeMatches(keyMatches, nameMatches) {
     const ids = new Set((keyMatches || []).map(function (entry) { return entry.id; }));
     const extra = (nameMatches || []).filter(function (entry) { return !ids.has(entry.id); });
-    return (keyMatches || []).concat(extra).sort(function (a, b) {
+    return dedupe((keyMatches || []).concat(extra)).sort(function (a, b) {
       return levelWeight(b.level) - levelWeight(a.level);
     });
   }
@@ -393,6 +410,7 @@
     buildIndex: buildIndex,
     matchTarget: matchTarget,
     matchNames: matchNames,
+    dedupe: dedupe,
     mergeMatches: mergeMatches,
     splitMatches: splitMatches,
     matchUrl: matchUrl,
