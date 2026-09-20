@@ -374,3 +374,11 @@ input.invalid, textarea.invalid { border-color: var(--danger); background: var(-
 @media (prefers-color-scheme: dark) {
   .callout code { background: rgba(255, 255, 255, .1); }
 }
+
+/* 內嵌於說明文字中的擴充功能圖示，讓使用者可以直接對照 */
+.inline-icon {
+  width: 1.3em;
+  height: 1.3em;
+  vertical-align: -0.28em;
+  margin: 0 1px;
+}
