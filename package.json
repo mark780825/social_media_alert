@@ -1,6 +1,6 @@
 {
   "name": "social-media-alert",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "瀏覽 Facebook / Threads 時，自動標示清單中的可疑粉專或帳號的瀏覽器擴充功能。",
   "private": true,
   "scripts": {
