@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "社群媒體警示 (Social Media Alert)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "瀏覽 Facebook / Threads 時，自動標示清單中的可疑粉專或帳號，並跳出警示提醒。",
   "homepage_url": "https://mark780825.github.io/social_media_alert/",
   "permissions": [
